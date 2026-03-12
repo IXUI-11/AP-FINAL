@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryPOO;
+using System.Diagnostics.Eventing.Reader;
 
 namespace AP_FINAL.Controllers
 {
@@ -22,7 +23,7 @@ namespace AP_FINAL.Controllers
         /// <returns></returns>
         [Route("Search")]
         [HttpGet]
-        public IEnumerable<Materiel> GetAllMatriel([FromQuery] Materiel b)
+        public ActionResult <IEnumerable<Materiel>> GetAllMateriels([FromQuery] Materiel b)
         {
             MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection"));
 
@@ -39,6 +40,56 @@ namespace AP_FINAL.Controllers
             Materiel book = (Materiel)repo.GetObjectById(new Materiel() { Id = id });
 
             return book;
+        }
+
+        [Route("Add")]
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        public ActionResult<Materiel> Insert(Materiel materiel)
+        {
+            MysqlRepository repo = new MysqlRepository(_connectionString);
+
+            if (materiel.Id > 0)
+            {
+                int id = repo.SaveObject(materiel);
+                if (id > 0)
+                {
+                    return Ok(materiel);
+                }
+                else
+                {
+                    return StatusCode(500);
+                }
+            }
+
+            else
+            {
+                return BadRequest();
+
+            }
+
+        }
+
+        [Route("Delete")]
+        [HttpDelete]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Delete(Materiel materiel)
+        {
+            var repo = new MysqlRepository(_configuration);
+
+            if (materiel.Id > 0)
+            {
+                bool res = repo.DeleteObject(materiel);
+                if (res)
+                {
+                    return Ok(materiel);
+                }
+                else
+                {
+                    return StatusCode(500);
+                }
+            }
+
         }
     }
 }
