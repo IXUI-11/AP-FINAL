@@ -45,7 +45,6 @@ namespace AP_FINAL.Controllers
 
         [Route("Add")]
         [HttpPut]
-        [Authorize(Roles = "Admin")]
         public ActionResult<Categorie> Insert(Categorie categorie)
         {
             MysqlRepository repo = new MysqlRepository(_connectionString);
