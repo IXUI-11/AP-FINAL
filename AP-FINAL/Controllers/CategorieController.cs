@@ -13,7 +13,7 @@ namespace AP_FINAL.Controllers
 
         public CategorieController(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("DefaultConnection")!;
         }
 
         /// <summary>

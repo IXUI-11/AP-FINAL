@@ -1,7 +1,9 @@
 ﻿using AP_FINAL.DBContext;
+using DataPOO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using RepositoryPOO;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
@@ -14,15 +16,18 @@ namespace AP_FINAL.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ITokenService _tokenService;
+        private readonly IConfiguration _configuration; // ← ajouté
 
         public AuthController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
-            ITokenService tokenService)
+            ITokenService tokenService,
+            IConfiguration configuration) // ← ajouté
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
+            _configuration = configuration; // ← ajouté
         }
 
         // POST: api/auth/register
@@ -45,25 +50,51 @@ namespace AP_FINAL.Controllers
 
             await _userManager.AddToRoleAsync(user, "User");
 
-            // Générer et retourner le token JWT
-            var roles = await _userManager.GetRolesAsync(user);
-            var token = _tokenService.GenerateAccessToken(user, roles);
-            var refreshToken = _tokenService.GenerateRefreshToken();
+            // ← ajouté : créer l'utilisateur métier
 
-            return Ok(new
+            try
             {
-                message = "Inscription réussie",
-                accessToken = token,
-                refreshToken = refreshToken,
-                expiresIn = 3600, // secondes (1 heure)
-                user = new
+                MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection")!);
+                var utilisateur = new Utilisateurs()
                 {
-                    id = user.Id,
-                    email = user.Email,
-                    username = user.UserName,
-                    roles = roles
-                }
-            });
+                    Nom = model.Nom,
+                    Prenom = model.Prenom,
+                    Email = model.Email,
+                    Ville = model.Ville,
+                    Rue = model.Rue,
+                    NumeroDeTelephone = model.NumeroDeTelephone,
+                    CodePostal = model.CodePostal,
+                    MotDePasse = "",
+                    AspNetUserId = user.Id
+                };
+                repo.SaveObject(utilisateur);
+
+                var roles = await _userManager.GetRolesAsync(user);
+                var token = _tokenService.GenerateAccessToken(user, roles);
+                var refreshToken = _tokenService.GenerateRefreshToken();
+
+                return Ok(new
+                {
+                    message = "Inscription réussie",
+                    accessToken = token,
+                    refreshToken = refreshToken,
+                    expiresIn = 3600, // secondes (1 heure)
+                    user = new
+                    {
+                        id = user.Id,
+                        email = user.Email,
+                        username = user.UserName,
+                        roles = roles
+                    }
+                });
+
+            }
+            catch (Exception ex)
+            {
+                // En cas d'erreur lors de la création de l'utilisateur métier, supprimer l'utilisateur Identity créé
+                return StatusCode(500, new { erreur = ex.Message });
+            }
+
         }
 
         // POST: api/auth/login
@@ -93,7 +124,7 @@ namespace AP_FINAL.Controllers
                 message = "Connexion réussie",
                 accessToken = token,
                 refreshToken = refreshToken,
-                expiresIn = 3600,
+                expiresIn = 3600, // secondes (1 heure)
                 user = new
                 {
                     id = user.Id,
@@ -163,6 +194,17 @@ namespace AP_FINAL.Controllers
         [Required]
         [MinLength(8)]
         public string Password { get; set; } = string.Empty;
+
+        [Required]
+        public string Nom { get; set; } = string.Empty;        // ← ajouté
+
+        [Required]
+        public string Prenom { get; set; } = string.Empty;     // ← ajouté
+
+        public string Ville { get; set; } = string.Empty;      // ← ajouté
+        public string Rue { get; set; } = string.Empty;        // ← ajouté
+        public string NumeroDeTelephone { get; set; } = string.Empty; // ← ajouté
+        public string CodePostal { get; set; } = string.Empty; // ← ajouté
     }
 
     public class LoginDto

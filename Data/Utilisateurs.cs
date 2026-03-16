@@ -59,6 +59,11 @@ namespace DataPOO
         /// </summary>
         private string codePostal;
         public string CodePostal { get => codePostal; set => codePostal = value; }
+
+        private string aspNetUserId;
+        public string AspNetUserId { get => aspNetUserId; set => aspNetUserId = value; }
+
+
         #endregion
 
         #region Constructeurs
@@ -128,7 +133,8 @@ namespace DataPOO
                 { "ville", "@ville" },
                 { "rue", "@rue" },
                 { "numero-de-telephone", "@numero_de_telephone" },
-                { "code-postal", "@code_postal" }
+                { "code-postal", "@code_postal" },
+                { "AspNetUserId" , "@AspNetUserId" }
             };
         }
 
@@ -146,6 +152,7 @@ namespace DataPOO
             mySqlParameters.Add(new MySqlParameter("@rue", MySqlDbType.VarChar, 100) { Value = this.Rue });
             mySqlParameters.Add(new MySqlParameter("@numero_de_telephone", MySqlDbType.VarChar, 10) { Value = this.NumeroDeTelephone });
             mySqlParameters.Add(new MySqlParameter("@code_postal", MySqlDbType.VarChar, 10) { Value = this.CodePostal });
+            mySqlParameters.Add(new MySqlParameter("@AspNetUserId", MySqlDbType.VarChar, 255) { Value = this.AspNetUserId });
 
             return mySqlParameters;
         }
@@ -160,14 +167,15 @@ namespace DataPOO
         public override void FillWithDataReader(DbDataReader reader)
         {
             this.Id = (int)reader["Id_Utilisateurs"];
-            this.Nom = reader["nom"].ToString();
-            this.MotDePasse = reader["mot-de-passe"].ToString();
-            this.Prenom = reader["prenom"].ToString();
-            this.Email = reader["email"].ToString();
-            this.Ville = reader["ville"].ToString();
-            this.Rue = reader["rue"].ToString();
-            this.NumeroDeTelephone = reader["numero-de-telephone"].ToString();
-            this.CodePostal = reader["code-postal"].ToString();
+            this.Nom = reader["nom"].ToString()!;
+            this.MotDePasse = reader["mot-de-passe"].ToString()!;
+            this.Prenom = reader["prenom"].ToString()!;
+            this.Email = reader["email"].ToString()!;
+            this.Ville = reader["ville"].ToString()!;
+            this.Rue = reader["rue"].ToString()!;
+            this.NumeroDeTelephone = reader["numero-de-telephone"].ToString()!;
+            this.CodePostal = reader["code-postal"].ToString()!;
+            this.AspNetUserId = reader["AspNetUserId"].ToString()!;
         }
 
         public override Dictionary<string, string> GetPredicateColumns()
@@ -197,6 +205,9 @@ namespace DataPOO
 
             if (!string.IsNullOrEmpty(CodePostal))
                 columns.Add("code-postal", "@code_postal");
+
+            if (!string.IsNullOrEmpty(AspNetUserId))
+                columns.Add("AspNetUserId", "@AspNetUserId");
 
             return columns;
         }
@@ -228,6 +239,9 @@ namespace DataPOO
 
             if (!string.IsNullOrEmpty(CodePostal))
                 mySqlParameters.Add(new MySqlParameter("@code_postal", MySqlDbType.VarChar, 10) { Value = this.CodePostal });
+
+            if (!string.IsNullOrEmpty(AspNetUserId))
+                mySqlParameters.Add(new MySqlParameter("@AspNetUserId", MySqlDbType.VarChar, 255) { Value = this.AspNetUserId });
 
             return mySqlParameters;
         }

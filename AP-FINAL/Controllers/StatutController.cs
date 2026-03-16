@@ -16,7 +16,7 @@ namespace AP_FINAL.Controllers
 
         public statutController(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("DefaultConnection")!;
         }
 
         [HttpGet]

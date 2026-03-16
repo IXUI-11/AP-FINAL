@@ -25,7 +25,7 @@ namespace AP_FINAL.Controllers
         [HttpGet]
         public ActionResult <IEnumerable<Materiel>> GetAllMateriels([FromQuery] Materiel b)
         {
-            MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection"));
+            MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection")!);
 
             List<Materiel> books = repo.GetByPredicate(b).Cast<Materiel>().ToList();
             return books;
@@ -35,7 +35,7 @@ namespace AP_FINAL.Controllers
         [HttpGet]
         public Materiel GetMatrielById(int id)
         {
-            MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection"));
+            MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection")!);
 
             Materiel book = (Materiel)repo.GetObjectById(new Materiel() { Id = id });
 
@@ -47,7 +47,7 @@ namespace AP_FINAL.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult<Materiel> Insert(Materiel materiel)
         {
-            MysqlRepository repo = new MysqlRepository(_connectionString);
+            MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection")!);
 
             if (materiel.Id > 0)
             {
@@ -75,8 +75,7 @@ namespace AP_FINAL.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Delete(Materiel materiel)
         {
-            var repo = new MysqlRepository(_configuration);
-
+            var repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection")!);
             if (materiel.Id > 0)
             {
                 bool res = repo.DeleteObject(materiel);
@@ -89,7 +88,10 @@ namespace AP_FINAL.Controllers
                     return StatusCode(500);
                 }
             }
-
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

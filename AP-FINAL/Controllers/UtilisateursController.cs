@@ -15,8 +15,10 @@ namespace AP_FINAL.Controllers
         public readonly string _connectionString;
 
         public UtilisateursController(IConfiguration configuration)
+
+        // le ! indique que nous sommes sûrs que la valeur ne sera pas nulle, même si le compilateur ne peut pas le vérifier. Cela permet d'éviter les avertissements de référence nullable dans ce cas précis.
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("DefaultConnection")! ;
         }
 
         [HttpGet]

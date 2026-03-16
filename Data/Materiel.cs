@@ -145,11 +145,11 @@ namespace DataPOO
         public override void FillWithDataReader(DbDataReader reader)
         {
             this.Id = (int)reader["Id_Materiel"];
-            this.NomMateriel = reader["nom_materiel"].ToString();
-            this.Description = reader["description"].ToString();
-            this.Valeur = reader["valeur"].ToString();
+            this.NomMateriel = reader["nom_materiel"].ToString()!;
+            this.Description = reader["description"].ToString()!;
+            this.Valeur = reader["valeur"].ToString()!;
             this.IdCategorie = (int)reader["id_categorie"];
-            this.Image = reader["image"].ToString();
+            this.Image = reader["image"].ToString()!;
             this.Prix = (decimal)reader["prix"];
         }
 
