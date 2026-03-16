@@ -127,13 +127,13 @@ namespace DataPOO
         {
             return new Dictionary<string, string> { 
                 { "nom", "@nom" },
-                { "mot-de-passe", "@mot_de_passe" },
+                { "mot_de_passe", "@mot_de_passe" },
                 { "prenom", "@prenom" },
                 { "email", "@email" },
                 { "ville", "@ville" },
                 { "rue", "@rue" },
-                { "numero-de-telephone", "@numero_de_telephone" },
-                { "code-postal", "@code_postal" },
+                { "numero_de_telephone", "@numero_de_telephone" },
+                { "code_postal", "@code_postal" },
                 { "AspNetUserId" , "@AspNetUserId" }
             };
         }
@@ -168,13 +168,13 @@ namespace DataPOO
         {
             this.Id = (int)reader["Id_Utilisateurs"];
             this.Nom = reader["nom"].ToString()!;
-            this.MotDePasse = reader["mot-de-passe"].ToString()!;
+            this.MotDePasse = reader["mot_de_passe"].ToString()!;
             this.Prenom = reader["prenom"].ToString()!;
             this.Email = reader["email"].ToString()!;
             this.Ville = reader["ville"].ToString()!;
             this.Rue = reader["rue"].ToString()!;
-            this.NumeroDeTelephone = reader["numero-de-telephone"].ToString()!;
-            this.CodePostal = reader["code-postal"].ToString()!;
+            this.NumeroDeTelephone = reader["numero_de_telephone"].ToString()!;
+            this.CodePostal = reader["code_postal"].ToString()!;
             this.AspNetUserId = reader["AspNetUserId"].ToString()!;
         }
 
@@ -186,7 +186,7 @@ namespace DataPOO
                 columns.Add("nom", "@nom");
 
             if (!string.IsNullOrEmpty(MotDePasse))
-                columns.Add("mot-de-passe", "@mot_de_passe");
+                columns.Add("mot_de_passe", "@mot_de_passe");
 
             if (!string.IsNullOrEmpty(Prenom))
                 columns.Add("prenom", "@prenom");
@@ -201,11 +201,10 @@ namespace DataPOO
                 columns.Add("rue", "@rue");
 
             if (!string.IsNullOrEmpty(NumeroDeTelephone))
-                columns.Add("numero-de-telephone", "@numero_de_telephone");
+                columns.Add("numero_de_telephone", "@numero_de_telephone");
 
             if (!string.IsNullOrEmpty(CodePostal))
-                columns.Add("code-postal", "@code_postal");
-
+                columns.Add("code_postal", "@code_postal");
             if (!string.IsNullOrEmpty(AspNetUserId))
                 columns.Add("AspNetUserId", "@AspNetUserId");
 

@@ -69,6 +69,10 @@ namespace AP_FINAL.Controllers
                 };
                 repo.SaveObject(utilisateur);
 
+                 // debug 
+                //int saveResult = repo.SaveObject(utilisateur);
+                //return StatusCode(500, new { debug = saveResult, aspNetId = user.Id, nom = model.Nom });
+
                 var roles = await _userManager.GetRolesAsync(user);
                 var token = _tokenService.GenerateAccessToken(user, roles);
                 var refreshToken = _tokenService.GenerateRefreshToken();
