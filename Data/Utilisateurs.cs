@@ -61,7 +61,7 @@ namespace DataPOO
         public string CodePostal { get => codePostal; set => codePostal = value; }
 
         private string aspNetUserId;
-        public string AspNetUserId { get => aspNetUserId; set => aspNetUserId = value; }
+        public string AspNetUserId { get => aspNetUserId; set => aspNetUserId = value; } // ajouter  19/03/26
 
 
         #endregion
@@ -134,7 +134,7 @@ namespace DataPOO
                 { "rue", "@rue" },
                 { "numero_de_telephone", "@numero_de_telephone" },
                 { "code_postal", "@code_postal" },
-                { "AspNetUserId" , "@AspNetUserId" }
+                { "AspNetUserId" , "@AspNetUserId" } // ajouter  19/03/26
             };
         }
 
@@ -152,7 +152,7 @@ namespace DataPOO
             mySqlParameters.Add(new MySqlParameter("@rue", MySqlDbType.VarChar, 100) { Value = this.Rue });
             mySqlParameters.Add(new MySqlParameter("@numero_de_telephone", MySqlDbType.VarChar, 10) { Value = this.NumeroDeTelephone });
             mySqlParameters.Add(new MySqlParameter("@code_postal", MySqlDbType.VarChar, 10) { Value = this.CodePostal });
-            mySqlParameters.Add(new MySqlParameter("@AspNetUserId", MySqlDbType.VarChar, 255) { Value = this.AspNetUserId });
+            mySqlParameters.Add(new MySqlParameter("@AspNetUserId", MySqlDbType.VarChar, 255) { Value = this.AspNetUserId }); // ajouter  19/03/26
 
             return mySqlParameters;
         }

@@ -16,7 +16,7 @@ namespace AP_FINAL.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ITokenService _tokenService;
-        private readonly IConfiguration _configuration; // ← ajouté
+        private readonly IConfiguration _configuration; // ← ajouté // 19/03/26 _configuration pour accéder à la chaîne de connexion
 
         public AuthController(
             UserManager<IdentityUser> userManager,
@@ -102,7 +102,7 @@ namespace AP_FINAL.Controllers
         }
 
         // POST: api/auth/login
-        [HttpPost("Login")]
+        [HttpPost("Login")]  // méthode de connexion
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
             if (!ModelState.IsValid)
@@ -162,7 +162,7 @@ namespace AP_FINAL.Controllers
                 emailConfirmed = user.EmailConfirmed
             });
         }
-
+       
         [HttpPut("ChangePwd")]
         [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto model)
@@ -214,7 +214,7 @@ namespace AP_FINAL.Controllers
     public class LoginDto
     {
         [Required]
-        [EmailAddress]
+        [EmailAddress] // format d'email pour la connexion
         public string Email { get; set; } = string.Empty;
 
         [Required]
