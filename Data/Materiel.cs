@@ -15,32 +15,32 @@ namespace DataPOO
         /// <summary>
         /// Nom du matériel
         /// </summary>
-        private string nomMateriel;
-        public string NomMateriel { get => nomMateriel; set => nomMateriel = value; }
+        private string? nomMateriel;
+        public string? NomMateriel { get => nomMateriel; set => nomMateriel = value; }
 
         /// <summary>
         /// Description du matériel
         /// </summary>
-        private string description;
-        public string Description { get => description; set => description = value; }
+        private string? description;
+        public string? Description { get => description; set => description = value; }
 
         /// <summary>
         /// Valeur du matériel
         /// </summary>
-        private string valeur;
-        public string Valeur { get => valeur; set => valeur = value; }
+        private string? valeur;
+        public string? Valeur { get => valeur; set => valeur = value; }
 
         /// <summary>
         /// Identifiant de la catégorie
         /// </summary>
-        private int idCategorie;
-        public int IdCategorie { get => idCategorie; set => idCategorie = value; }
+        private int? idCategorie;
+        public int? IdCategorie { get => idCategorie; set => idCategorie = value; }
 
         /// <summary>
         /// Image du matériel
         /// </summary>
-        private string image;
-        public string Image { get => image; set => image = value; }
+        private string? image;
+        public string? Image { get => image; set => image = value; }
 
         /// <summary>
         /// Prix du matériel

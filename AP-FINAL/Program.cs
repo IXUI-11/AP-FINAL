@@ -92,9 +92,29 @@ namespace AP_FINAL
             builder.Services.AddScoped<ITokenService, TokenService>();
 
             builder.Services.AddAuthorization();
-            builder.Services.AddControllers();
+
+
+            // ajouter le 23/04/2026 pour les cors
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngular", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
+            // ajouter le 23/04/2026 pour les cors
+            builder.Services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.SuppressModelStateInvalidFilter = true;
+                });
 
             var app = builder.Build();
+
+
 
             using (var scope = app.Services.CreateScope())
             {
@@ -109,7 +129,7 @@ namespace AP_FINAL
 
                     foreach (var role in roles)
                     {
-                        if (! await roleManager.RoleExistsAsync(role))
+                        if (!await roleManager.RoleExistsAsync(role))
                         {
                             await roleManager.CreateAsync(new IdentityRole(role));
                         }
@@ -122,7 +142,8 @@ namespace AP_FINAL
                 }
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors("AllowAngular"); // <- ajouter le 23/04/26 pour autoriser les échanges api
+            //app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

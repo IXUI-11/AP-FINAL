@@ -110,5 +110,35 @@ namespace AP_FINAL.Controllers
                 return StatusCode(400);
             }
         }
+
+
+        // pour récuperer les catégories avec les matériels associés 
+        // a revoir pour bien comprendre
+        [HttpGet("CategoriesAvecMateriels")]
+        public ActionResult GetCategoriesAvecMateriels()
+        {
+            var repo = new MysqlRepository(_connectionString);
+            var  categories = repo.GetByPredicate(new Categorie()).Cast<Categorie>().ToList();
+            var materiels = repo.GetByPredicate(new Materiel()).Cast<Materiel>().ToList();
+
+
+            var resultat = categories.Select(categories => new
+            {
+                id = categories.Id,
+                nom = categories.LibelleCategorie,
+                modeles = materiels
+                .Where(materiels => materiels.IdCategorie == categories.Id)
+                .Select(materiels => new
+                {
+                    id = materiels.Id,
+                    nom = materiels.NomMateriel,
+                    description = materiels.Description,
+                    valeur = materiels.Valeur,
+                    image = materiels.Image,
+                    prix = materiels.Prix
+                }).ToList()
+            });
+            return Ok(resultat);
+        }
     }
 }
