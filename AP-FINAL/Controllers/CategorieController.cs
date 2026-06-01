@@ -125,17 +125,19 @@ namespace AP_FINAL.Controllers
             var resultat = categories.Select(categories => new
             {
                 id = categories.Id,
-                nom = categories.LibelleCategorie,
+                libelleCategorie = categories.LibelleCategorie,
                 modeles = materiels
                 .Where(materiels => materiels.IdCategorie == categories.Id)
                 .Select(materiels => new
                 {
                     id = materiels.Id,
-                    nom = materiels.NomMateriel,
+                    nomMateriel = materiels.NomMateriel,
                     description = materiels.Description,
                     valeur = materiels.Valeur,
                     image = materiels.Image,
-                    prix = materiels.Prix
+                    prix = materiels.Prix,
+                    idCategorie = materiels.IdCategorie  // ← ajoute ça
+
                 }).ToList()
             });
             return Ok(resultat);
