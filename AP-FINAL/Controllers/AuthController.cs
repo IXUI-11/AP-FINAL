@@ -153,13 +153,24 @@ namespace AP_FINAL.Controllers
 
             var roles = await _userManager.GetRolesAsync(user);
 
+            // récupère les données depuis la table utilisateurs 23/05/26
+
+            MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection"));
+
+            var utilisateurs = repo.GetByPredicate(new Utilisateurs() { AspNetUserId = userId }).Cast<Utilisateurs>().ToList();
+            var utilisateur = utilisateurs.FirstOrDefault();
+
+
             return Ok(new
             {
                 id = user.Id,
                 email = user.Email,
                 username = user.UserName,
                 roles = roles,
-                emailConfirmed = user.EmailConfirmed
+                emailConfirmed = user.EmailConfirmed,
+                nom = utilisateur.Nom,
+                prenom = utilisateur.Prenom,
+                idUtilisateurs = utilisateur?.Id,
             });
         }
        
