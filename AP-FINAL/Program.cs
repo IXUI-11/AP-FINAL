@@ -99,7 +99,7 @@ namespace AP_FINAL
             {
                 options.AddPolicy("AllowAngular", policy =>
                 {
-                    policy.WithOrigins("http://localhost:4200")
+                    policy.WithOrigins("http://localhost:4200", "https://projetangular2026.salaheddinebelhaska.tech")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                 });
