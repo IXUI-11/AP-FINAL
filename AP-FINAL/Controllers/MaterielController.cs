@@ -1,9 +1,7 @@
 using DataPOO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using RepositoryPOO;
-using System.Diagnostics.Eventing.Reader;
 
 namespace AP_FINAL.Controllers
 {
@@ -17,18 +15,13 @@ namespace AP_FINAL.Controllers
             _configuration = configuration;
         }
 
-        /// <summary>
-        /// Renvoie tous les objets avec les paramètres 
-        /// </summary>
-        /// <returns></returns>
         [Route("Search")]
         [HttpGet]
-        public ActionResult <IEnumerable<Materiel>> GetAllMateriels([FromQuery] Materiel b)
+        public ActionResult<IEnumerable<Materiel>> GetAllMateriels([FromQuery] Materiel m)
         {
             MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection")!);
-
-            List<Materiel> books = repo.GetByPredicate(b).Cast<Materiel>().ToList();
-            return books;
+            List<Materiel> materiels = repo.GetByPredicate(m).Cast<Materiel>().ToList();
+            return materiels;
         }
 
         [Route("Single")]
@@ -36,19 +29,17 @@ namespace AP_FINAL.Controllers
         public Materiel GetMatrielById(int id)
         {
             MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection")!);
-
-            Materiel book = (Materiel)repo.GetObjectById(new Materiel() { Id = id });
-
-            return book;
+            Materiel materiel = (Materiel)repo.GetObjectById(new Materiel() { Id = id });
+            return materiel;
         }
 
-        [Route("Add")]
+        // UPDATE - Modifier un matériel existant
+        [Route("Update")]
         [HttpPut]
         [Authorize(Roles = "Admin")]
-        public ActionResult<Materiel> Insert(Materiel materiel)
+        public ActionResult<Materiel> Update(Materiel materiel)
         {
             MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection")!);
-
             if (materiel.Id > 0)
             {
                 int id = repo.SaveObject(materiel);
@@ -64,10 +55,29 @@ namespace AP_FINAL.Controllers
 
             else
             {
+
                 return BadRequest();
-
             }
+          
+        }
 
+        // INSERT - Ajouter un nouveau matériel
+        [Route("Add")]
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult<Materiel> Insert(Materiel materiel)
+        {
+            MysqlRepository repo = new MysqlRepository(_configuration.GetConnectionString("DefaultConnection")!);
+            int id = repo.SaveObject(materiel);
+            if (id > 0)
+            {
+                materiel.Id = id;
+                return Ok(materiel);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
 
         [Route("Delete")]
