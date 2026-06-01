@@ -34,8 +34,8 @@ namespace DataPOO
         /// <summary>
         /// Statut de la réservation
         /// </summary>
-        private string statut;
-        public string Statut { get => statut; set => statut = value; }
+        //private string statut;
+        //public string Statut { get => statut; set => statut = value; }
 
         /// <summary>
         /// Prix total de la réservation
@@ -50,6 +50,13 @@ namespace DataPOO
         public int IdUtilisateurs { get => idUtilisateurs; set => idUtilisateurs = value; }
         #endregion
 
+        private int idMateriel;
+        public int IdMateriel { get => idMateriel; set => idMateriel = value; }
+
+        private int idStatus;
+
+        public int IdStatus { get => idStatus; set => idStatus = value; }
+
         #region Constructeurs
         /// <summary>
         /// Constructeur par défaut
@@ -59,14 +66,16 @@ namespace DataPOO
         /// <summary>
         /// Constructeur complet appelant le constructeur parent (BDDObject)
         /// </summary>
-        public Reservation(DateTime dateDebut, DateTime dateFin, DateTime dateReservation, string statut, decimal prixTotal, int idUtilisateurs) : base()
+        public Reservation(DateTime dateDebut, DateTime dateFin, DateTime dateReservation, /*string statut*/  decimal prixTotal, int idUtilisateurs, int idMateriel, int idStatus) : base()
         {
             this.DateDebut = dateDebut;
             this.DateFin = dateFin;
             this.DateReservation = dateReservation;
-            this.Statut = statut;
+            //this.Statut = statut;
             this.PrixTotal = prixTotal;
             this.IdUtilisateurs = idUtilisateurs;
+            this.IdMateriel = idMateriel;
+            this.IdStatus = idStatus;
         }
         #endregion
 
@@ -107,13 +116,14 @@ namespace DataPOO
         /// </summary>
         public override Dictionary<string, string> GetInsertUpdateColumns()
         {
-            return new Dictionary<string, string> { 
+            return new Dictionary<string, string> {
                 { "date_debut", "@date_debut" },
                 { "date_fin", "@date_fin" },
                 { "date_reservation", "@date_reservation" },
-                { "statut", "@statut" },
                 { "prix_total", "@prix_total" },
-                { "Id_Utilisateurs", "@Id_Utilisateurs" }
+                { "Id_Utilisateurs", "@Id_Utilisateurs" },
+                { "Id_Materiel", "@Id_Materiel" },
+                { "Id_statut", "@Id_statut" }
             };
         }
 
@@ -126,12 +136,13 @@ namespace DataPOO
             mySqlParameters.Add(new MySqlParameter("@date_debut", MySqlDbType.DateTime) { Value = this.DateDebut });
             mySqlParameters.Add(new MySqlParameter("@date_fin", MySqlDbType.DateTime) { Value = this.DateFin });
             mySqlParameters.Add(new MySqlParameter("@date_reservation", MySqlDbType.DateTime) { Value = this.DateReservation });
-            mySqlParameters.Add(new MySqlParameter("@statut", MySqlDbType.VarChar, 50) { Value = this.Statut });
             var prixParam = new MySqlParameter("@prix_total", MySqlDbType.Decimal) { Value = this.PrixTotal };
             prixParam.Precision = 15;
             prixParam.Scale = 2;
             mySqlParameters.Add(prixParam);
             mySqlParameters.Add(new MySqlParameter("@Id_Utilisateurs", MySqlDbType.Int32) { Value = this.IdUtilisateurs });
+            mySqlParameters.Add(new MySqlParameter("@Id_Materiel", MySqlDbType.Int32) { Value = this.IdMateriel });
+            mySqlParameters.Add(new MySqlParameter("@Id_statut", MySqlDbType.Int32) { Value = this.IdStatus });
 
             return mySqlParameters;
         }
@@ -149,9 +160,11 @@ namespace DataPOO
             this.DateDebut = (DateTime)reader["date_debut"];
             this.DateFin = (DateTime)reader["date_fin"];
             this.DateReservation = (DateTime)reader["date_reservation"];
-            this.Statut = reader["statut"].ToString();
+            //this.Statut = reader["statut"].ToString();
             this.PrixTotal = (decimal)reader["prix_total"];
             this.IdUtilisateurs = (int)reader["Id_Utilisateurs"];
+            this.idMateriel = (int)reader["Id_Materiel"];
+            this.IdStatus = (int)reader["Id_statut"];
         }
 
         public override Dictionary<string, string> GetPredicateColumns()
@@ -167,8 +180,8 @@ namespace DataPOO
             if (DateReservation != default(DateTime))
                 columns.Add("date_reservation", "@date_reservation");
 
-            if (!string.IsNullOrEmpty(Statut))
-                columns.Add("statut", "@statut");
+            //if (!string.IsNullOrEmpty(Statut))
+            //    columns.Add("statut", "@statut");
 
             if (PrixTotal > 0)
                 columns.Add("prix_total", "@prix_total");
@@ -192,8 +205,8 @@ namespace DataPOO
             if (DateReservation != default(DateTime))
                 mySqlParameters.Add(new MySqlParameter("@date_reservation", MySqlDbType.DateTime) { Value = this.DateReservation });
 
-            if (!string.IsNullOrEmpty(Statut))
-                mySqlParameters.Add(new MySqlParameter("@statut", MySqlDbType.VarChar, 50) { Value = this.Statut });
+            //if (!string.IsNullOrEmpty(Statut))
+            //    mySqlParameters.Add(new MySqlParameter("@statut", MySqlDbType.VarChar, 50) { Value = this.Statut });
 
             if (PrixTotal > 0)
             {
