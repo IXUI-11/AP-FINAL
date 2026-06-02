@@ -23,6 +23,7 @@ namespace RepositoryPOO
         /// Constructeur prenant la chaine de connexion
         /// Appelle le constructeur parent
         /// </summary>
+        // Le mot-clé "base" permet d'envoyer la chaine de connexion directement à la classe mère (BDDObjectRepository)
         public MysqlRepository(string connectionString) : base(connectionString)
         {
         }
@@ -35,7 +36,7 @@ namespace RepositoryPOO
         /// </summary>
         protected override bool CreateConnection()
         {
-            bool conOK = false;
+            bool conOK = false; // On part du principe que ça échoue par défaut
             try
             {
                 this.connection = new MySqlConnection(ConnectionString);
@@ -61,16 +62,19 @@ namespace RepositoryPOO
 
             if (CreateConnection()) //Si connexion BDD OK
             {
+                // on cree un nouveau objet cmd de type MySqlCommand
                 MySqlCommand cmd;
 
                 //Génération de la commande
-                if (!bDDObject.HasId())
+                if (!bDDObject.HasId()) // S'il n'a pas d'ID, c'est un objet tout neuf
                 {
+                    // pour faire un INSERT 
                     cmd = new MySqlCommand(GenerateInsertCommand(bDDObject));
                     cmd.Parameters.AddRange(bDDObject.GetInsertUpdateParameters().ToArray());
                 }
                 else
                 {
+                    //pour faire UPDATE
                     cmd = new MySqlCommand(GenerateUpdateCommand(bDDObject));
                     cmd.Parameters.AddRange(bDDObject.GetInsertUpdateParameters().ToArray());
                     cmd.Parameters.AddRange(bDDObject.GetPrimaryKeyParameters().ToArray());
@@ -107,6 +111,7 @@ namespace RepositoryPOO
         /// <param name="bDDObject">L'objet à partir duquel générer la requête</param>
         protected override string GenerateInsertCommand(IBDDConnector bDDObject)
         {
+            // On demande à l'objet son tableau de correspondance : <"nom_colonne", "@parametre"> clé et valeur
             Dictionary<string, string> columns = bDDObject.GetInsertUpdateColumns();
 
             string insertCommand = "INSERT INTO ";
