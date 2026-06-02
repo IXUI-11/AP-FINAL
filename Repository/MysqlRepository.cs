@@ -9,6 +9,7 @@ namespace RepositoryPOO
     /// <summary>
     /// Classe de liaison avec une BDD MySQL
     /// </summary>
+    // classe parent  BDDObjectRepository
     public class MysqlRepository : BDDObjectRepository
     {
         #region Attributs
