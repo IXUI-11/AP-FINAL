@@ -8,6 +8,7 @@ namespace RepositoryPOO
     /// <summary>
     /// Représente un objet de BDD avec un identifiant entier autoincrémenté
     /// </summary>
+    //  // Classe de base BDDObject (brouillon)  destinée à être héritée par les autres classes 
     public abstract class BDDObject : IBDDConnector
     {
         #region Attributs
