@@ -7,6 +7,7 @@ namespace RepositoryPOO
     /// Classe abstraite représentant un objet de liaison vers une BDD relationnelle
     /// Il faut hériter de cette classe pour créer le lien avec une BDD en particulier (Mysql, PostGres, Oracle, SQLSERVER, ...)
     /// </summary>
+    //Gère la connexion
     public abstract class BDDObjectRepository
     {
         #region Attributs
